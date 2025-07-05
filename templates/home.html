@@ -1,34 +1,27 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="x-UA-compatible content=IE-edge"/>
-    <meta name="viewport" content="width-device-width, initial-scale.0"/>
-    <title>Calculator</title>
+from django.shortcuts import render
 
-</head>
-<body>
-<h> Calculator Main Page </h>
-<form method="post">
-    {% csrf_token %}
-<h1>enter number 1:</h1>
-<label for="num1">enter number 1</label>
-<input type="number" name="num1" placeholder="enter number 1">
-<br><br>
-<label for="num2">enter number 2</label>
-<input type="number" name="num2" placeholder="enter number 2">
-<br><br>
-<label for="op">enter operation</label>
-<input type="op" name="op" placeholder="enter operation">
-<br><br>
-<button type="submit">
-    submit
-</button>
-</form>
-<!-- <-- janja template {{result}}-that there are sending the value from back-end--> -->
-{% if result %}
-<h1>result: {{result}}</h1>
-{% endif %}
-</body>
-
-</html>
+def calculator_view(request):
+    result = None
+    if request.method == "POST":
+        try:
+            num1 = float(request.POST.get('num1'))
+            num2 = float(request.POST.get('num2'))
+            op = request.POST.get('op')
+            
+            if op == '+':
+                result = num1 + num2
+            elif op == '-':
+                result = num1 - num2
+            elif op == '*':
+                result = num1 * num2
+            elif op == '/':
+                if num2 != 0:
+                    result = num1 / num2
+                else:
+                    result = "Error: Division by zero"
+            else:
+                result = "Invalid operation"
+        except (ValueError, TypeError):
+            result = "Invalid input. Please enter valid numbers."
+            
+    return render(request, 'your_template.html', {'result': result})

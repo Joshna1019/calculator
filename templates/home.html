@@ -33,6 +33,7 @@
     <!-- Display result if it exists -->
     {% if result %}
         <h2>Result: {{ result }}</h2>
+    <a href="{% url "home" %}">Back to calculator</a> 
     {% endif %}
 </body>
 </html>
